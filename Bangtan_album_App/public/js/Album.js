@@ -1,118 +1,138 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, TouchableOpacity , View, Dimensions} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions , FlatList, ViewPagerAndroid} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-const { height , width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 export default class Album extends Component {
     state = {
-        isEditting : false, 
-        isCompleted : false
+        isEditting: false,
+        isCompleted: false,
+
     }
+
     render() {
-        const { isCompleted , isEditting } = this.state;
+
         return (
-        <View style = {styles.container}>
-            <View style ={styles.column} >
-            <TouchableOpacity onPress={this._toggleComplate}>
-                <View style={ [styles.circle ,  
-                                isCompleted ? styles.Completedcircle : styles.unCompltedcircle]}>
-                </View>
-            </TouchableOpacity>
-                <Text style={[styles.text ,  isCompleted ? styles.CompletedText : styles.unCompltedcText ]}> LOVE YOURSELF 結 ‘Answer’ </Text>
+            <View style={styles.container}>
+                <FlatList data={[
+                    {key: 'LOVE YOURSELF 結 ‘Answer’'  },
+                    {key: 'LOVE YOURSELF 傳 ‘Tear’' },
+                    {key: 'LOVE YOURSELF 承  ‘Her’'  },
+                    {key: 'LOVE YOURSELF 起 ‘Wonder’' },
+                    {key: 'WINGS'  },
+                    {key: 'YOU NEVER WALK ALONE' },
+                    {key: '화양연화 part2'},
+                    {key: '화양연화 part1'},
+                ]}  
+                    renderItem ={
+                        ({item}) => <Text style={styles.text}>  {item.key}</Text> 
+                    }                    
+                /> 
             </View>
-               { isEditting ? (
-                   <View style={styles.actions}>
-                    <TouchableOpacity onPressOut={this._finshEiditin}> 
-                        <View style = {styles.actionContanior}>
-                            <Text style = {styles.actionText}> 확인 </Text>    
-                        </View>    
-                    </TouchableOpacity>  
-                   </View>
-               ) : (
-                <View style={styles.actions}>
-                    <TouchableOpacity onPressOut={this._startEidtting}> 
-                        <View style = {styles.actionContanior}>
-                            <Text style = {styles.actionText}> 수정 </Text>    
-                        </View>    
-                    </TouchableOpacity>  
-                    <TouchableOpacity > 
-                        <View style = {styles.actionContanior}>
-                            <Text style = {styles.actionText}> 삭제 </Text>    
-                        </View>    
-                    </TouchableOpacity>  
-                </View>
-               ) }
-        </View>
         );
-    } 
+    }
     _toggleComplate = () => {
         this.setState(preSatus => {
-            return{   // 버튼 클릭하면서 true, false 로 변환~ 
-                isCompleted : !preSatus.isCompleted
+            return {   // 버튼 클릭하면서 true, false 로 변환~ 
+                isCompleted: !preSatus.isCompleted
             }
         });
     }
     _startEidtting = () => {
         this.setState({
-            isEditting : true
+            isEditting: true
         })
     }
     _finshEiditin = () => {
-        this.setState( {
-            isEditting : false
+        this.setState({
+            isEditting: false
         })
     }
 }
 
+export class updownIcon extends Component {
+
+    render() {
+        const { isEditting } = this.state;
+        return (
+            isEditting ? (
+                <View style={styles.actions}>
+                    <TouchableOpacity onPressOut={this._finshEiditin}>
+                        <View style={styles.actionContanior}>
+                            <Ionicons
+                                style={styles.actionText} color={"black"} size={40} name="ios-arrow-up" />
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            ) : (
+                    <View style={styles.actions}>
+                        <TouchableOpacity onPressOut={this._startEidtting}>
+                            <View style={styles.actionContanior}>
+                                <Ionicons style={styles.actionText} color={"black"} size={40} name="ios-arrow-down" />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                ) 
+        )
+    }
+
+}
+
+
 const styles = StyleSheet.create({
-    container : {
-        width : width - 50, 
-        borderBottomColor : '#fff',
-        borderBottomWidth : StyleSheet.hairlineWidth,
-        flexDirection : "row", 
-        alignItems: "center", 
-        justifyContent : "space-between" 
-    }, 
-    circle : {
-        width : 30, 
-        height : 30, 
-        borderRadius : 15,
-        backgroundColor : '#E8D9FF', 
-        borderColor : '#FFB2D9',
-        borderWidth : 5,
-        marginLeft : 10, 
-        marginRight : 20 
+
+    container: {
+        width: width - 50,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between"
     },
-    Completedcircle  :{
-        backgroundColor : '#E8D9FF'
+    circle: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        backgroundColor: '#E8D9FF',
+        borderColor: '#FFB2D9',
+        borderWidth: 5,
+        marginLeft: 10,
+        marginRight: 20
     },
-    unCompltedcircle : {
-        backgroundColor : '#D5D5D5'
+    Completedcircle: {
+        backgroundColor: 'transparent',
+        color: '#FFB2D9'
     },
-    CompletedText : {
-        color : '#EAEAEA', 
-        textDecorationLine : "line-through"
+    unCompltedcircle: {
+        backgroundColor: 'transparent'
     },
-    unCompltedcText : {
-        color : '#000'
+    CompletedText: {
+        color: '#EAEAEA',
+        textDecorationLine: "line-through"
+    },
+    unCompltedcText: {
+        color: '#000'
     },
 
-    text : {
-        fontWeight : "600", 
-        fontSize :20, 
-        marginVertical : 20
+    text: {
+        fontWeight: "600",
+        fontSize: 20,
+        marginVertical: 20,
+        marginLeft: 20
+    },
+    column: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: width / 2,
+        justifyContent: "space-between"
+    },
+    actions: {
+        flexDirection: "row"
+    },
+    actionContanior: {
+        marginVertical: 10,
+        marginHorizontal: 10
     }, 
-    column : {
-        flexDirection : "row", 
-        alignItems : "center", 
-        width : width / 2, 
-        justifyContent : "space-between" 
-    }, 
-    actions : {
-        flexDirection : "row"
-    }, 
-    actionContanior :  {
-        marginVertical : 10, 
-        marginHorizontal : 10
-    }
+    Albumdetail : {
+        alignItems : "center"
+      }
 })
